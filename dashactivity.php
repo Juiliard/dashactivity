@@ -173,7 +173,8 @@ class dashactivity extends Module
 						' . Shop::addSqlRestriction(false, 'c') . '
 						AND (\'' . pSQL(date('Y-m-d H:i:00', time() - 60 * (int) Configuration::get('DASHACTIVITY_VISITOR_ONLINE'))) . '\' < c.`date_add`)
 					' . ($maintenance_ips ? 'AND c.ip_address NOT IN (' . preg_replace('/[^,0-9]/', '', $maintenance_ips) . ')' : '') . '
-					ORDER BY c.date_add DESC';
+					GROUP BY c.ip_address
+                    ORDER BY c.date_add DESC';
         }
         Db::getInstance((bool) _PS_USE_SQL_SLAVE_)->executeS($sql);
         $online_visitor = Db::getInstance()->NumRows();
